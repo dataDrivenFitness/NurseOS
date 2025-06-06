@@ -43,17 +43,19 @@ class _EditCarePlanScreenState extends State<EditCarePlanScreen> {
     }
   }
 
-  void _save() {
-    final updated = CarePlanModel(
-      id: widget.carePlan.id,
-      patientId: widget.carePlan.patientId,
-      title: _titleController.text,
-      description: _descriptionController.text,
-      startDate: _startDate,
-      endDate: _endDate,
-    );
-    Navigator.pop(context, updated);
-  }
+ void _save() {
+  final updated = CarePlanModel(
+    id: widget.carePlan.id,
+    patientId: widget.carePlan.patientId,
+    title: _titleController.text,
+    description: _descriptionController.text,
+    startDate: _startDate,
+    endDate: _endDate,
+    createdAt: widget.carePlan.createdAt, // ✅ fix: reuse original timestamp
+    createdBy: widget.carePlan.createdBy, // ✅ required field
+  );
+  Navigator.pop(context, updated);
+}
 
   @override
   void dispose() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'screens/home_screen.dart';
 import 'state/theme_provider.dart';
+import 'themes/typography.dart';
 
 void main() {
   runApp(const ProviderScope(child: NurseOSApp()));
@@ -14,19 +15,23 @@ class NurseOSApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
 
+    final lightScheme = ColorScheme.fromSeed(seedColor: Colors.indigo, brightness: Brightness.light);
+    final darkScheme = ColorScheme.fromSeed(seedColor: Colors.indigo, brightness: Brightness.dark);
+
     return MaterialApp(
       title: 'NurseOS',
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo, brightness: Brightness.light),
+        fontFamily: 'Inter',
+        colorScheme: lightScheme,
+        textTheme: buildInterTextTheme(lightScheme),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo, brightness: Brightness.dark),
-        scaffoldBackgroundColor: Colors.black,
+        fontFamily: 'Inter',
+        colorScheme: darkScheme,
+        textTheme: buildInterTextTheme(darkScheme),
         useMaterial3: true,
       ),
       home: const HomeScreen(),

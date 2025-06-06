@@ -1,4 +1,4 @@
-/// Represents a care plan for a patient
+/// Represents a nursing care plan for a patient.
 class CarePlanModel {
   final String id;
   final String patientId;
@@ -6,6 +6,8 @@ class CarePlanModel {
   final String description;
   final DateTime startDate;
   final DateTime? endDate;
+  final DateTime createdAt;
+  final String createdBy;
 
   CarePlanModel({
     required this.id,
@@ -14,27 +16,32 @@ class CarePlanModel {
     required this.description,
     required this.startDate,
     this.endDate,
+    required this.createdAt,
+    required this.createdBy,
   });
 
-  factory CarePlanModel.fromJson(Map<String, dynamic> json) {
+  factory CarePlanModel.fromMap(Map<String, dynamic> data, String docId) {
     return CarePlanModel(
-      id: json['id'] as String,
-      patientId: json['patientId'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      startDate: DateTime.parse(json['startDate'] as String),
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate'] as String) : null,
+      id: docId,
+      patientId: data['patientId'],
+      title: data['title'],
+      description: data['description'],
+      startDate: DateTime.parse(data['startDate']),
+      endDate: data['endDate'] != null ? DateTime.parse(data['endDate']) : null,
+      createdAt: DateTime.parse(data['createdAt']),
+      createdBy: data['createdBy'],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'patientId': patientId,
       'title': title,
       'description': description,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'createdBy': createdBy,
     };
   }
 }

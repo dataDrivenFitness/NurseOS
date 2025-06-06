@@ -16,4 +16,8 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/InterVariable.ttf
   uses-material-design: true
