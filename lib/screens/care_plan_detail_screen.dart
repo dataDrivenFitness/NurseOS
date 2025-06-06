@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/care_plan_model.dart';
 import 'edit_care_plan_screen.dart';
+import '../state/gpt_recommendation_provider.dart';
 
-class CarePlanDetailScreen extends StatefulWidget {
+class CarePlanDetailScreen extends ConsumerStatefulWidget {
   final CarePlanModel carePlan;
   const CarePlanDetailScreen({super.key, required this.carePlan});
 
   @override
-  State<CarePlanDetailScreen> createState() => _CarePlanDetailScreenState();
+  ConsumerState<CarePlanDetailScreen> createState() => _CarePlanDetailScreenState();
 }
 
-class _CarePlanDetailScreenState extends State<CarePlanDetailScreen> {
+class _CarePlanDetailScreenState extends ConsumerState<CarePlanDetailScreen> {
   late CarePlanModel plan;
 
   @override
@@ -50,6 +52,8 @@ class _CarePlanDetailScreenState extends State<CarePlanDetailScreen> {
     final start = plan.startDate.toLocal().toIso8601String().split('T').first;
     final end = plan.endDate?.toLocal().toIso8601String().split('T').first ?? 'Ongoing';
 
+    final gptAsync = ref.watch(gptRecommendationProvider(plan));
+
     return Scaffold(
       appBar: AppBar(title: Text(plan.title)),
       backgroundColor: theme.colorScheme.background,
@@ -66,6 +70,15 @@ class _CarePlanDetailScreenState extends State<CarePlanDetailScreen> {
               _section('Description', plan.description),
               _section('Start Date', start),
               _section('End Date', end),
+              _section('Created By', plan.createdBy),
+              const Divider(height: 32),
+              Text('AI RECOMMENDATION', style: theme.textTheme.labelSmall),
+              const SizedBox(height: 6),
+              gptAsync.when(
+                loading: () => const Text('Generating...'),
+                error: (e, _) => Text('Error: $e'),
+                data: (rec) => Text(rec, style: theme.textTheme.bodyMedium),
+              ),
             ],
           ),
         ),
